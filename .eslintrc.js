@@ -13,6 +13,16 @@ module.exports = {
   },
   rules: {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    // "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     tabWidth: 2,
+    //     semi: true, // punto y coma
+    //     singleQuote: false, // comillas simples
+    //     endOfLine: "auto",
+    //     printWidth: 80, // ancho de cada linea
+    //   },
+    // ],
   },
 };
