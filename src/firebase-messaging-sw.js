@@ -11,7 +11,8 @@ const firebaseConfig = {
   projectId: "push-notifications-cb82b",
   storageBucket: "push-notifications-cb82b.appspot.com",
   messagingSenderId: "825748182548",
-  appId: "1:825748182548:web:65bb8259f5ef9c1d827901"
+  appId: "1:825748182548:web:65bb8259f5ef9c1d827901",
+  measurementId: "G-4EXWFXFJWE"
 };
 
 function requestPermission() {
