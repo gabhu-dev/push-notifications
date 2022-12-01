@@ -3,7 +3,9 @@ import { initializeApp } from "firebase/app";
 import {
   getMessaging,
   getToken,
+  onMessage
 } from "firebase/messaging";
+import {getAuth, signInAnonymously} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCv8fh2momdYSie4zsY8nrgqMnRP_t746k",
@@ -23,6 +25,13 @@ function requestPermission() {
       const app = initializeApp(firebaseConfig);
 
       const messaging = getMessaging(app);
+      console.log(messaging);
+      const auth = getAuth(app);
+      console.log("auth", auth);
+      signInAnonymously(auth)
+        .then((user) => console.log(user))
+        .catch((error) => console.error(error));
+        
       getToken(messaging, {
         vapidKey: "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps",
       }).then((currentToken) => {
@@ -32,6 +41,9 @@ function requestPermission() {
           console.log("can not get token");
         }
       });
+      onMessage(messaging, (payload) => {
+        console.log(payload)
+      })
     } else {
       console.log("do not have permission");
     }
@@ -39,3 +51,19 @@ function requestPermission() {
 }
 
 requestPermission();
+
+console.log('service worker')
+// const app = initializeApp(firebaseConfig);
+// const messagingRes = getMessaging(app);
+
+// console.log(messagingRes)
+// messagingRes.onBackgroundMessageHandler
+// (payload => {
+//   console.log('recibiste un mensaje mientras estabas ausente')
+//   const notificationTitle= payload.notification.title;
+//   const notificationOptions = {
+//     body: payload.notification.body,
+//   };
+
+// return self.registration.showNotification(notificationTitle, notificationOptions)
+// })
