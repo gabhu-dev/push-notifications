@@ -27,11 +27,13 @@ console.log(app)
 console.log(app.messaging())
 // Retrieve firebase messaging
 const messaging = firebase.messaging();
+console.log(messaging)
 
 messaging.getToken({ vapidKey: "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps" })
 .then((currentToken) => {
   if (currentToken) {
     console.log('client token', currentToken)
+    // document.innerHTML = currentToken;
   } else {
     console.log('No registration token available. Request permission to generate one.');
   }

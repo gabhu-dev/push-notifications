@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, getToken } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCv8fh2momdYSie4zsY8nrgqMnRP_t746k",
@@ -17,5 +17,17 @@ const app = initializeApp(firebaseConfig);
 console.log('in firebase')
 // const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
+
+getToken(messaging,{ vapidKey: "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps" })
+.then((currentToken) => {
+  if (currentToken) {
+    console.log('client token', currentToken)
+    document.body.innerHTML = currentToken;
+  } else {
+    console.log('No registration token available. Request permission to generate one.');
+  }
+}).catch((err) => {
+  console.log('An error occurred while retrieving token. ', err);
+})
 
 export default messaging;
