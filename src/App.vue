@@ -1,43 +1,52 @@
 <template>
   <div id="app">
-    <!-- <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view /> -->
-    <button @click="login">loguearse</button>
-    <!-- <button @click="activeMessages">Generar token</button> -->
+    <button @click="registerWorker">Registrar</button>
+    <button @click="handleGetToken">Generar token</button>
   </div>
 </template>
 <script>
-// import { getAuth, signInAnonymously } from "firebase/auth";
-// import { getToken } from "firebase/messaging";
-// import { messaging } from "./firebase";
+import { getToken } from "firebase/messaging";
 
 export default {
-  // mounted() {
-  //   onMessage(messaging, (message) => {
-  //     console.log("tu mensaje", message);
-  //   });
-  // },
   methods: {
-    async login() {
-      // const auth = getAuth();
-      // console.log("auth", auth);
-      // signInAnonymously(auth)
-      //   .then((user) => console.log(user))
-      //   .catch((error) => console.error(error));
+    async registerWorker() {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("firebase-messaging-sw.js")
+          .then((reg) => {
+            console.log(`Service Worker Registration (Scope: ${reg.scope})`);
+            console.log("Firebase cloud messaging object", this.$messaging);
+          })
+          .catch((error) => {
+            const msg = `Service Worker Error (${error})`;
+            console.error(msg);
+          });
+      } else {
+        // happens when the app isn't served over HTTPS or if the browser doesn't support service workers
+        console.warn("Service Worker not available");
+      }
     },
-    // async activeMessages() {
-    //   const token = await getToken(messaging, {
-    //     vapidKey:
-    //       "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps",
-    //   }).catch((error) =>
-    //     console.error("Tuviste un error al generar el token", error)
-    //   );
-    //   if (token) console.log("tu token", token);
-    //   else console.log("no tienes token");
-    // },
+    handleGetToken() {
+      console.log(this.$messaging);
+
+      getToken(this.$messaging, {
+        vapidKey:
+          "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            console.log("client token", currentToken);
+            document.body.innerHTML = currentToken;
+          } else {
+            console.log(
+              "No registration token available. Request permission to generate one."
+            );
+          }
+        })
+        .catch((err) => {
+          console.log("An error occurred while retrieving token. ", err);
+        });
+    },
   },
 };
 </script>

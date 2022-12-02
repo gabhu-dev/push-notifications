@@ -3,13 +3,6 @@
 importScripts('https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.1.0/firebase-messaging-compat.js');
 
-// import { initializeApp } from "firebase/app";
-// import {
-//   getMessaging,
-//   getToken,
-//   onMessage
-// } from "firebase/messaging";
-// import {getAuth, signInAnonymously} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCv8fh2momdYSie4zsY8nrgqMnRP_t746k",
@@ -21,11 +14,24 @@ const firebaseConfig = {
   measurementId: "G-4EXWFXFJWE"
 };
 
-const app = firebase.initializeApp(firebaseConfig)
 
-console.log(app)
-console.log(app.messaging())
-// Retrieve firebase messaging
+
+firebase.initializeApp(firebaseConfig)
+
+// app.messaging().getToken({ vapidKey: "BIkEkD9SoE0RmxzBsfCSSEI-fgai5ebU54f3dx5ExaBhvEoduKL44V0w4MmFtIFEF-eiTC7C-VNkhTesF1HYYps" })
+// .then((currentToken) => {
+//   if (currentToken) {
+//     console.log('client token', currentToken)
+//   } else {
+//     console.log('No registration token available. Request permission to generate one.');
+//   }
+// }).catch((err) => {
+//   console.log('An error occurred while retrieving token. ', err);
+// })
+
+// console.log(app)
+
+// // Retrieve firebase messaging
 const messaging = firebase.messaging();
 console.log(messaging)
 
@@ -43,31 +49,32 @@ console.log(messaging)
 
 
 
-// messaging.onBackgroundMessage((payload) => {
-// console.log('Received background message ', payload);
+messaging.onBackgroundMessage((payload) => {
+console.log('Received background message ', payload);
 
-// const notificationTitle = payload.notification.title;
-// const notificationOptions = {
-// body: payload.notification.body,
-// };
+const notificationTitle = payload.notification.title;
+const notificationOptions = {
+body: payload.notification.body,
+};
 
-// return self.registration.showNotification(notificationTitle,
-// notificationOptions)
+return self.registration.showNotification(notificationTitle,
+notificationOptions)
 
-// });
-messaging.setBackgroundMessageHandler(function(payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  var notificationTitle = 'Background Message Title';
-  var notificationOptions = {
-    body: 'Background Message body.',
-    icon: '/firebase-logo.png'
-  };
-
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
 });
+// messaging.setBackgroundMessageHandler(function(payload) {
+//   console.log('[firebase-messaging-sw.js] Received background message ', payload);
+//   // Customize notification here
+//   var notificationTitle = 'Background Message Title';
+//   var notificationOptions = {
+//     body: 'Background Message body.',
+//     icon: '/firebase-logo.png'
+//   };
 
+//   return self.registration.showNotification(notificationTitle,
+//     notificationOptions);
+// });
+
+// console.log(Notification, 'notification')
 // function requestPermission() {
 //   console.log("requesting permission...", firebase);
 //   Notification.requestPermission().then((permission) => {
@@ -103,7 +110,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
 
 // requestPermission();
 
-console.log('service worker')
+// console.log('service worker')
 // const app = initializeApp(firebaseConfig);
 // const messagingRes = getMessaging(app);
 
