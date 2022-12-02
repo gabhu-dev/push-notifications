@@ -2,12 +2,21 @@
   <div id="app">
     <button @click="registerWorker">Registrar</button>
     <button @click="handleGetToken">Generar token</button>
+    <div>
+      RESULTADO DE SERCICE:
+      {{ resultService }}
+    </div>
+    <div>TOKEN: {{ token }}</div>
   </div>
 </template>
 <script>
 import { getToken } from "firebase/messaging";
 
 export default {
+  data: () => ({
+    resultService: "",
+    token: "",
+  }),
   methods: {
     async registerWorker() {
       if ("serviceWorker" in navigator) {
@@ -16,10 +25,12 @@ export default {
           .then((reg) => {
             console.log(`Service Worker Registration (Scope: ${reg.scope})`);
             console.log("Firebase cloud messaging object", this.$messaging);
+            this.resultService = "Exitoso, Se registró el service";
           })
           .catch((error) => {
             const msg = `Service Worker Error (${error})`;
             console.error(msg);
+            this.resultService = msg;
           });
       } else {
         // happens when the app isn't served over HTTPS or if the browser doesn't support service workers
@@ -36,11 +47,12 @@ export default {
         .then((currentToken) => {
           if (currentToken) {
             console.log("client token", currentToken);
-            document.body.innerHTML = currentToken;
+            this.token = currentToken;
           } else {
             console.log(
               "No registration token available. Request permission to generate one."
             );
+            this.token = "Ocurrio un error";
           }
         })
         .catch((err) => {
